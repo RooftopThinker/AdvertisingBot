@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  bot:
+    container_name: massage_bot
+    image: massage_bot:latest
+    build: .
+    environment:
+      - TZ=Europe/Moscow
+      - DB_URL=postgresql+psycopg://postgres:123123@bot_database:5432/postgres
+    depends_on:
+      - bot_database
+    restart: always
+  bot_database:
+    container_name: bot_database
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=123123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+      - TZ=Europe/Moscow
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata: {}
+
